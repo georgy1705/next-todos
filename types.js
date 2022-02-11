@@ -1,0 +1,2 @@
+export const START_LOADING = "START_LOADING"
+export const FETCH_BOOKS_ERROR = "FETCH_BOOKS_ERROR"
