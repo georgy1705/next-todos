@@ -1,2 +1,14 @@
+.logo {
+    max-width: 500px;
+    max-height: 300px;
+    margin: 0 auto;
+}
 
+.text {
+    margin: 0 auto;
+    margin-top: 20px;
+    font-size: 18px;
+    max-width: 500px;
+    text-align: center;
+}
 
