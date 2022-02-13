@@ -1,30 +1,65 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { fetchTodos } from "../actions"
+import { createTodo, fetchTodos, removeTodo } from "../actions"
 import { MainLayout } from "../layouts/layout"
 import styles from "../styles/Todos.module.css"
 
 const Todos = () => {
     const [counter, setCounter] = useState(10)
+    const [switchInput, setSwitchInput] = useState(false)
+    const [inputCreate, setInputCreate] = useState('')
+
     const todos = useSelector((state) => state.todos)
+    const loading = useSelector((state) => state.loading)
+    const inputClasses = ['input']
     const dispatch = useDispatch()
-    
-    const loadMore = () => {
-        setCounter(prev => prev + 10)
-    }
 
     useEffect(() => {
         dispatch(fetchTodos())
     }, [dispatch])
 
-    const renderTodos = () => todos.slice(0, counter).map(todo => {
+    const loadMore = () => {
+        setCounter(prev => prev + 10)
+    }
+
+    useMemo(() => {
+        if (switchInput) {
+            inputClasses.push('edit')
+        } 
+    }, [switchInput])
+
+    const editTodo = () => {
+        setSwitchInput(state => !state)
+    }
+
+    const renderTodos = () => todos.slice(0, counter).map((todo, i) => {
             return (
                 <div className={styles.todos} key={todo.id}>
-                    <li>
-                        {todo.title}
-                    </li>
                     <input type="checkbox" className={styles.complete} defaultChecked={todo.completed}/>
+                    <li>
+                        {
+                            switchInput ?
+                            <input 
+                                type="text" 
+                                defaultValue={todo.title} 
+                                className={styles[inputClasses.join(' ')]}
+                            /> :
+                            <input 
+                                type="text" 
+                                defaultValue={todo.title} 
+                                className={styles[inputClasses.join(' ')]}
+                                readOnly
+                            />
+                        }
+                    </li>
+                    <i 
+                        className={"fas fa-times delete " + styles.delete} 
+                        onClick={() => dispatch(removeTodo(i, todos))}
+                        title="delete"
+                    >
+                    </i>
+                    <div onClick={editTodo} className={styles.editText}>Change</div>
                 </div>
                 
             )
@@ -33,13 +68,23 @@ const Todos = () => {
     return (
         <MainLayout>
             <div className="container">
-                {renderTodos()}
                 {
-                    todos.length >= counter ?
-                        <button className="btn btn-info mt-3" onClick={loadMore}>Показать еще</button> :
-                        null
-                }
+                    loading ? 
+                    <div className={styles.loading}>Loading...</div> : 
+                    <>
+                        {renderTodos()}
+                        <div className={styles.CreateTodo}>
+                            <input type="text" onChange={e => setInputCreate(e.target.value)}/>
+                            <button className="btn btn-sm btn-danger" onClick={() => dispatch(createTodo(todos, inputCreate))}>Create todo</button>
+                        </div>
+                        
+                        {todos.length >= counter ?
+                            <button className="btn btn-info mt-3" onClick={loadMore}>Load more</button> :
+                            null}   
+                    </>
+                    
                 
+                }
             </div>
             
         </MainLayout>

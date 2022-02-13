@@ -7,6 +7,7 @@ export default function MyDocument() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+        <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet"/>
       </Head>
       <body>
         <Main />
