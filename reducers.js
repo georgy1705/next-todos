@@ -6,7 +6,7 @@ const initialState = {
     error: null
 }
 
-const rootReducer = (state = initialState, { type, error, payload, removeTodos, createTodos }) => {
+const rootReducer = (state = initialState, { type, error, payload, removeTodos, createTodos}) => {
   switch (type) {
     case types.FETCH_TODOS_SUCCESS:
       return {

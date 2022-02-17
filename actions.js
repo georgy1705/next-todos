@@ -15,7 +15,8 @@ export function fetchTodosError(e) {
 }
 
 export function removeTodo(id, todos) {
-    const res = todos.filter((el, i) => i != id)
+    let res = todos.filter((el, i) => i != id)
+    res = res.map(res.pop, [...res])
     return {
         type: types.REMOVE_TODO,
         removeTodos: res
@@ -23,13 +24,13 @@ export function removeTodo(id, todos) {
 }
 
 export function createTodo(todos, name) {
-    const arr = todos.map((obj, i)=>({...obj, id: i+1}));
-    const res = [{
+    const id = todos[todos.length-1].id
+    const res = [...todos, {
         "userId": 1,
-        "id": 0,
+        "id": id+1,
         "title": name,
-        "completed": false
-    }, ...arr]
+        "completed": false,
+    }]
 
     return {
         type: types.CREATE_TODO,

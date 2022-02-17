@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { createTodo, fetchTodos, removeTodo } from "../actions"
@@ -33,7 +33,9 @@ const Todos = () => {
         setSwitchInput(state => !state)
     }
 
-    const renderTodos = () => todos.slice(0, counter).map((todo, i) => {
+    const res = todos.map(todos.pop, [...todos])
+
+    const renderTodos = () => res.slice(0, counter).map((todo, i) => {
             return (
                 <div className={styles.todos} key={todo.id}>
                     <input type="checkbox" className={styles.complete} defaultChecked={todo.completed}/>
@@ -55,7 +57,7 @@ const Todos = () => {
                     </li>
                     <i 
                         className={"fas fa-times delete " + styles.delete} 
-                        onClick={() => dispatch(removeTodo(i, todos))}
+                        onClick={() => dispatch(removeTodo(i, res))}
                         title="delete"
                     >
                     </i>
